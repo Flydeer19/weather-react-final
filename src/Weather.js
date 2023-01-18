@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./Weather.css";
+import FormattedDate from "./FormattedDate";
 
 export default function Weather() {
   const [ready, setReady] = useState(false);
   const [weatherData, setWeatherData] = useState({});
 
   function handleSubmit(response) {
-    console.log(response.data);
     setReady(true);
     setWeatherData({
       temperature: response.data.main.temp,
@@ -15,7 +15,7 @@ export default function Weather() {
       wind: response.data.wind.speed,
       icon: `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`,
       iconDescription: response.data.weather[0].main,
-      date: "Friday: 15:00",
+      date: new Date(response.data.dt),
       description: response.data.weather[0].description,
     });
   }
@@ -43,7 +43,9 @@ export default function Weather() {
         </form>
         <h1>Kyiv</h1>
         <ul>
-          <li>{weatherData.date}</li>
+          <li>
+            <FormattedDate date={weatherData.date} />
+          </li>
           <li>{weatherData.description}</li>
         </ul>
         <div className="row mt-3">
@@ -62,7 +64,6 @@ export default function Weather() {
           </div>
           <div className="col-5">
             <ul>
-              <li>Precipitation: 80%</li>
               <li>Humidity: {weatherData.humidity}%</li>
               <li>Wind: {weatherData.wind} km/h</li>
             </ul>
